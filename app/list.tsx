@@ -22,10 +22,10 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 
   const getItems = async () => {
     const url = new URL('/api/items', baseUrl);
-    console.log(`url.href:`, url.href);
-    const req = new NextRequest(url.href);
+    console.log(`url.href:`, url);
+    const req = new NextRequest(url);
     console.log(`url:`, url);
-    const items = await fetch(new NextRequest(url.href), {next: {revalidate:10}}).then(res => res.json());
+    const items = await fetch(new NextRequest(url), {next: {revalidate:10}}).then(res => res.json());
     setItems(items);
   }
 
