@@ -77,8 +77,8 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
     <>
       <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0 bg-white h-[100vh] w-[100vw]' >
         <OrderList className='!h-[100vh]' {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] [z-index:20] bg-white/90 backdrop-blur-sm' }, list: { className: 'sticky !top-[75px] w-full ![height:400px] [z-index:15] ' }, root: { className: '!h-[100vh] relative [z-index:5]' }, container: { className: 'relative !h-[100vh] [z-index:10]' }, controls: { className: 'hidden' } }} />
-        <div className='flex justify-center space-x-2 fixed bottom-0 left-0 xs:h-[25px] sm:h-[15%] bg-black p-4 m-0 w-full' >
-          <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto' value={itemInputValue} onChange={e => {
+        <div className='flex justify-center space-x-2 fixed bottom-0 left-0 xs:h-[25px] sm:h-[15%] ![z-index:17] bg-black p-4 m-0 w-full' >
+          <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto ' value={itemInputValue} onChange={e => {
             console.log(`e:`, e);
             setItemInputValue(e.target.value);
           }} />
