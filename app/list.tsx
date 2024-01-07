@@ -63,9 +63,11 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 
     getItems();
 
+    setInterval(getItems, 10000);
+
   }, []);
 
-  setInterval(getItems, 10000);
+  
 
   return (
     <>
