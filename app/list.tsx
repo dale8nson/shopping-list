@@ -74,7 +74,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
           <Button severity='secondary' className='text-3xl w-3/12' raised label={'Add'} onClick={async () => {
             console.log(`addItemResult:`, await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue }), headers:{action:'add'} })));
             setItemInputValue('');
-            getItems();
+            await getItems();
           }} />
         </div>
       </div>
