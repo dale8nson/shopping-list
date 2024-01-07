@@ -64,14 +64,14 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
   }, []);
   return (
     <>
-      <div className='flex-col my-4 absolute top-0 left-0' >
-        <OrderList {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop className='h-[100vh] ' pt={{container:{className:'h-[90vh] bg-white w-full fixed top-0' }, controls:{className:'hidden'}}} />
-        <div className='flex justify-center my-4 space-x-2 fixed bottom-0 left-0' >
+      <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0' >
+        <OrderList {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop className='h-[90vh] ' pt={{container:{className:'h-[90vh] bg-white w-full fixed top-0' }, controls:{className:'hidden'}}} />
+        <div className='flex justify-center my-4 space-x-2 fixed bottom-1 left-1' >
           <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto' value={itemInputValue} onChange={e => {
             console.log(`e:`, e);
             setItemInputValue(e.target.value);
           }} />
-          <Button severity='secondary' className='text-3xl' raised label={'Add'} onClick={async () => {
+          <Button severity='secondary' className='text-3xl w-3/12' raised label={'Add'} onClick={async () => {
             console.log(`addItemResult:`, await fetch(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue }), headers:{action:'add'}, mode:'no-cors' }));
             setItemInputValue('');
             getItems();
