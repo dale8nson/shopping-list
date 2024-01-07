@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { addItem, deleteItem } from "@/actions";
+import { addItem, deleteItem, toggleCompleted } from "@/actions";
 
 export async function POST (req: NextRequest) {
   const action = req.headers.get('action');
@@ -12,7 +12,9 @@ export async function POST (req: NextRequest) {
       break;
     case 'delete':
       res = await deleteItem(json.name);
-
+      break;
+    case 'toggle':
+      res = await toggleCompleted(json.name, json.id);
     default:
       break;
   }

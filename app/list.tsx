@@ -31,15 +31,19 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
     setItems(items);
   }
 
-  const ListItem = ({ name, completed }: { name: string, completed: string }) => {
+  const ListItem = ({ name, completed, id }: { name: string, completed: string, id: string | undefined }) => {
     const [done, setDone] = useState<boolean>((completed === "true") ? true : false);
+
     return (
-      <div className='flex-col' >
+      <div className='flex-col' id={id} >
         <div className='flex justify-between'>
-          <Checkbox checked={done} onChange={e => setDone(e.checked as boolean)} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
+          <Checkbox checked={done} onChange={async e => { 
+            setDone(e.checked as boolean);
+            await fetch(new NextRequest(new URL('/api/item', baseUrl), {method:'POST', body:JSON.stringify({name}), headers:{action:'toggle'}}))
+            }} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
           <div className={`font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}`}>{name}</div>
           <Button className='mr-0 ml-auto' onClick={ async () => {
-            await fetch(new NextRequest(new URL(`/api/item`, baseUrl), {method:'POST', body:JSON.stringify({name}),headers:{ action:'delete'}}));
+            await fetch(new NextRequest(new URL(`/api/item`, baseUrl), {method:'POST', body:JSON.stringify({name, id}), headers:{ action:'delete'}}));
             getItems();
           }} >
             <i className='pi pi-times text-3xl' ></i>
@@ -50,10 +54,10 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
     )
   
   }
-  const itemTemplate: (item: { name: string, completed: boolean }) => ReactNode = item => {
+  const itemTemplate: (item: { name: string, completed: boolean, id:string }) => ReactNode = item => {
 
     return (
-        <ListItem {...{ name: item.name, completed: item.completed ? "true" : "false" }} />
+        <ListItem {...{ name: item.name, completed: item.completed ? "true" : "false", id: item.id }} />
     )
   }
 
@@ -79,7 +83,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
             setItemInputValue(e.target.value);
           }} />
           <Button severity='secondary' className='text-3xl w-3/12' raised label={'Add'} onClick={async () => {
-            console.log(`addItemResult:`, await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue }), headers:{action:'add'} })));
+            console.log(`addItemResult:`, await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue, id:crypto.randomUUID() }), headers:{action:'add'} })));
             setItemInputValue('');
             getItems();
           }} />
