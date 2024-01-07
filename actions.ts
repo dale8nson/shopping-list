@@ -30,7 +30,10 @@ export const toggleCompleted = async (name:string, id?:string) => {
   const db = client.db('shopping-list');
   const items = db.collection('items');
 
-  const result = await items.updateOne({name, id}, {$set:{completed:true}});
+  const rec = await items.findOne({name, id});
+  const completed = rec?.completed;
+
+  const result = await items.updateOne({name, id}, {$set:{completed:!completed}});
 
   return result;
 }
