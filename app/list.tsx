@@ -21,7 +21,7 @@ const List = ({ value }: { value: WithId<Document>[] }) => {
   const [itemsNeedUpdate, setItemsNeedUpdate] = useState(true);
 
   const getItems = async () => {
-    const items = await fetch('http://localhost:3000/api/items').then(res => res.json());
+    const items = await fetch('http://localhost:3000/api/items', {next: {revalidate:10}}).then(res => res.json());
     setItems(items);
   }
 
@@ -60,10 +60,10 @@ const List = ({ value }: { value: WithId<Document>[] }) => {
   }, []);
   return (
     <>
-      <div className='flex-col my-4' >
-        <OrderList {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop />
-        <div className='flex justify-center my-4 space-x-4' >
-          <InputText className='text-black text-3xl w-[77.75%] h-auto ml-auto mr-0' value={itemInputValue} onChange={e => {
+      <div className='flex-col my-4 absolute top-0 left-0' >
+        <OrderList {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop className='h-[100vh] ' pt={{container:{className:'h-[90vh] bg-white w-full fixed top-0 left-0' }, controls:{className:'hidden'}}} />
+        <div className='flex justify-center my-4 space-x-4 fixed bottom-0 left-0' >
+          <InputText className='text-black text-3xl w-10/12 h-auto ml-auto mr-0' value={itemInputValue} onChange={e => {
             console.log(`e:`, e);
             setItemInputValue(e.target.value);
           }} />
