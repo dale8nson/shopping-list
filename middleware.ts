@@ -2,6 +2,7 @@ import { NextRequest } from "next/server"
 import { NextResponse } from "next/server";
 
 const middleware = async (req:NextRequest) => {
+  console.log(`middleware`);
   const searchParams = req.nextUrl.searchParams;
   const user = searchParams.get('user');
   const code = searchParams.get('code');

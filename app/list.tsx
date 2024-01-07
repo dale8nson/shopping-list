@@ -36,17 +36,17 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 
     return (
       <div className='flex-col align-middle justify-center' id={id} >
-        <div className='flex justify-between'>
+        <div className='flex justify-between hover:[&_i:text-black] hover:[&_i:font-black]'>
           <Checkbox checked={done} onChange={async e => {
             setDone(e.checked as boolean);
             await fetch(new NextRequest(new URL('/api/item', baseUrl), { method: 'POST', body: JSON.stringify({ name }), headers: { action: 'toggle' } }))
           }} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
           <div className={`font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}`}>{name}</div>
-          <Button className='mr-0 ml-auto' onClick={async () => {
+          <Button unstyled className='mr-0 ml-auto [&_i:hover:text-gray-400]' onClick={async () => {
             await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name, id }), headers: { action: 'delete' } }));
             getItems();
           }} >
-            <i className='pi pi-times text-3xl' ></i>
+            <i className='pi pi-times text-3xl text-gray-400 px-8' ></i>
           </Button>
         </div>
         <Divider type='solid' className='w-full mx-0 border-2' />
@@ -75,9 +75,9 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 
   return (
     <>
-      <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0 bg-white h-[100vh] w-[100vw]' >
-        <OrderList className='!h-[100vh]' {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] [z-index:20] bg-white/90 backdrop-blur-sm' }, list: { className: 'sticky !top-[75px] w-full ![height:400px] [z-index:15] ' }, root: { className: '!h-[100vh] relative [z-index:5]' }, container: { className: 'relative !h-[100vh] [z-index:10]' }, controls: { className: 'hidden' } }} />
-        <div className='flex justify-center space-x-2 fixed bottom-0 left-0 xs:h-[25px] sm:h-[15%] ![z-index:17] bg-black p-4 m-0 w-full' >
+      <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0 bg-white h-[100vh] w-[100vw] overflow-hidden' >
+        <OrderList unstyled className='!h-[100vh]' {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] xs:h-[10%] [z-index:20] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-4xl border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'sticky !top-[10%] left-0 w-full xs:!h-[90%] sm:!h-[70%] [z-index:15] overflow-scroll ' }, root: { className: '!h-[90vh] absolute w-[100vw] [z-index:5]' }, container: { className: 'absolute top-[10%] !h-[85%] w-full [z-index:10] overflow-scroll' }, controls: { className: 'hidden' } }} />
+        <div className='flex justify-center space-x-2 fixed bottom-0 left-0 xs:h-[15%] sm:h-[15%] ![z-index:17] bg-black p-4 m-0 w-full' >
           <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto ' value={itemInputValue} onChange={e => {
             console.log(`e:`, e);
             setItemInputValue(e.target.value);
