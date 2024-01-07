@@ -16,7 +16,7 @@ export default async function Home() {
   return (
     <main>
       <div className='flex flex-col justify-center md:w-6/12 xs:w-full h-full m-auto'>
-        <List />
+        <List baseUrl={process.env.BASE_URL as string} />
       </div>
     </main>
   )

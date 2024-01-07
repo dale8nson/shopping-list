@@ -4,9 +4,7 @@ import { addItem, deleteItem } from "@/actions";
 
 export async function POST (req: NextRequest) {
   const action = req.headers.get('action');
-
   let res;
-
   const json = await req.json();
   switch(action) {
     case 'add':
@@ -14,7 +12,6 @@ export async function POST (req: NextRequest) {
       break;
     case 'delete':
       res = await deleteItem(json.name);
-      console.log(`/api/item delete:`,res);
 
     default:
       break;

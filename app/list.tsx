@@ -12,8 +12,8 @@ import { Divider } from 'primereact/divider';
 import { NextRequest } from 'next/server';
 import { getClientBuildManifest } from 'next/dist/client/route-loader';
 
-const List = ({ value }: { value: WithId<Document>[] }) => {
-
+const List = ({ baseUrl }: { baseUrl: string }) => {
+  console.log(`baseUrl:`, baseUrl);
   const [items, setItems] = useState([]);
   // const itemsRef = useRef(null);
   const [itemInputValue, setItemInputValue] = useState('');
@@ -21,7 +21,11 @@ const List = ({ value }: { value: WithId<Document>[] }) => {
   const [itemsNeedUpdate, setItemsNeedUpdate] = useState(true);
 
   const getItems = async () => {
-    const items = await fetch('http://localhost:3000/api/items', {next: {revalidate:10}}).then(res => res.json());
+    const url = new URL('/api/items', baseUrl);
+    console.log(`url.href:`, url.href);
+    const req = new NextRequest(url.href);
+    console.log(`url:`, url);
+    const items = await fetch(url.href, {next: {revalidate:10}}).then(res => res.json());
     setItems(items);
   }
 
@@ -33,7 +37,7 @@ const List = ({ value }: { value: WithId<Document>[] }) => {
           <Checkbox checked={done} onChange={e => setDone(e.checked as boolean)} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
           <div className={`font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}`}>{name}</div>
           <Button className='mr-0 ml-auto' onClick={ async () => {
-            await fetch(new NextRequest(`http://localhost:3000/api/item`, {method:'POST', body:JSON.stringify({name}),headers:{ action:'delete'}}));
+            await fetch(new NextRequest(new URL(`/api/item`, baseUrl), {method:'POST', body:JSON.stringify({name}),headers:{ action:'delete'}}));
             await getItems();
           }} >
             <i className='pi pi-times text-3xl' ></i>
@@ -47,7 +51,7 @@ const List = ({ value }: { value: WithId<Document>[] }) => {
   const itemTemplate: (item: { name: string, completed: boolean }) => ReactNode = item => {
 
     return (
-        <ListItem {...{ name: item.name, completed: item.completed, value }} />
+        <ListItem {...{ name: item.name, completed: item.completed ? "true" : "false" }} />
     )
   }
 
@@ -68,7 +72,7 @@ const List = ({ value }: { value: WithId<Document>[] }) => {
             setItemInputValue(e.target.value);
           }} />
           <Button severity='secondary' className='text-3xl' raised label={'Add'} onClick={async () => {
-            console.log(`addItemResult:`, await fetch(new NextRequest('http://localhost:3000/api/item', { method: 'POST', body: JSON.stringify({ name: itemInputValue }), headers:{action:'add'} })));
+            console.log(`addItemResult:`, await fetch(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue }), headers:{action:'add'} }));
             setItemInputValue('');
             getItems();
           }} />
