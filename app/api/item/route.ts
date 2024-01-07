@@ -19,3 +19,5 @@ export async function POST (req: NextRequest) {
   
   return new NextResponse(JSON.stringify(res), {status:200, statusText:'All good'} );
 }
+
+export const dynamic = 'force-dynamic';

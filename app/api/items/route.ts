@@ -14,3 +14,5 @@ export const GET = async (req: NextRequest) => {
   const json = itemArr.map(item => ({name:item.name, completed:item.completed}))
   return NextResponse.json(json);
 }
+
+export const dynamic = 'force-dynamic';
