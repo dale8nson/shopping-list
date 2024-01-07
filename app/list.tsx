@@ -61,9 +61,9 @@ const List = ({ value }: { value: WithId<Document>[] }) => {
   return (
     <>
       <div className='flex-col my-4 absolute top-0 left-0' >
-        <OrderList {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop className='h-[100vh] ' pt={{container:{className:'h-[90vh] bg-white w-full fixed top-0 left-0' }, controls:{className:'hidden'}}} />
-        <div className='flex justify-center my-4 space-x-4 fixed bottom-0 left-0' >
-          <InputText className='text-black text-3xl w-10/12 h-auto ml-auto mr-0' value={itemInputValue} onChange={e => {
+        <OrderList {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop className='h-[100vh] ' pt={{container:{className:'h-[90vh] bg-white w-full fixed top-0' }, controls:{className:'hidden'}}} />
+        <div className='flex justify-center my-4 space-x-2 fixed bottom-0 left-0' >
+          <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto' value={itemInputValue} onChange={e => {
             console.log(`e:`, e);
             setItemInputValue(e.target.value);
           }} />
