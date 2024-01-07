@@ -11,6 +11,7 @@ import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { NextRequest } from 'next/server';
 import { getClientBuildManifest } from 'next/dist/client/route-loader';
+import { useRouter } from 'next/navigation';
 
 const List = ({ baseUrl }: { baseUrl: string }) => {
   console.log(`baseUrl:`, baseUrl);
@@ -19,13 +20,14 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
   const [itemInputValue, setItemInputValue] = useState('');
   const [addItemResult, setAddItemResult] = useState<InsertOneResult<Document> | null>(null);
   const [itemsNeedUpdate, setItemsNeedUpdate] = useState(true);
+  const router = useRouter();
 
   const getItems = async () => {
     const url = new URL('/api/items', baseUrl);
     console.log(`url.href:`, url);
     const req = new NextRequest(url);
     console.log(`url:`, url);
-    const items = await fetch(new NextRequest(url), {next: {revalidate:10}}).then(res => res.json());
+    const items = await fetch(new NextRequest(url)).then(res => res.json());
     setItems(items);
   }
 
@@ -38,7 +40,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
           <div className={`font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}`}>{name}</div>
           <Button className='mr-0 ml-auto' onClick={ async () => {
             await fetch(new NextRequest(new URL(`/api/item`, baseUrl), {method:'POST', body:JSON.stringify({name}),headers:{ action:'delete'}}));
-            await getItems();
+            getItems();
           }} >
             <i className='pi pi-times text-3xl' ></i>
           </Button>
@@ -62,6 +64,9 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
     getItems();
 
   }, []);
+
+  setInterval(getItems, 10000);
+
   return (
     <>
       <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0' >
@@ -74,7 +79,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
           <Button severity='secondary' className='text-3xl w-3/12' raised label={'Add'} onClick={async () => {
             console.log(`addItemResult:`, await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue }), headers:{action:'add'} })));
             setItemInputValue('');
-            await getItems();
+            getItems();
           }} />
         </div>
       </div>
