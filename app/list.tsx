@@ -83,3 +83,5 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 }
 
 export default List
+
+export const dynamic = 'force-dynamic';
