@@ -25,7 +25,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
     console.log(`url.href:`, url.href);
     const req = new NextRequest(url.href);
     console.log(`url:`, url);
-    const items = await fetch(url.href, {next: {revalidate:10}}).then(res => res.json());
+    const items = await fetch(new NextRequest(url.href), {next: {revalidate:10}}).then(res => res.json());
     setItems(items);
   }
 
@@ -37,7 +37,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
           <Checkbox checked={done} onChange={e => setDone(e.checked as boolean)} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
           <div className={`font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}`}>{name}</div>
           <Button className='mr-0 ml-auto' onClick={ async () => {
-            await fetch(new NextRequest(new URL(`/api/item`, baseUrl), {method:'POST', body:JSON.stringify({name}),headers:{ action:'delete'}, mode:'no-cors'}));
+            await fetch(new NextRequest(new URL(`/api/item`, baseUrl), {method:'POST', body:JSON.stringify({name}),headers:{ action:'delete'}}));
             await getItems();
           }} >
             <i className='pi pi-times text-3xl' ></i>
@@ -72,7 +72,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
             setItemInputValue(e.target.value);
           }} />
           <Button severity='secondary' className='text-3xl w-3/12' raised label={'Add'} onClick={async () => {
-            console.log(`addItemResult:`, await fetch(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue }), headers:{action:'add'}, mode:'no-cors' }));
+            console.log(`addItemResult:`, await fetch(new NextRequest(new URL(`/api/item`, baseUrl)), { method: 'POST', body: JSON.stringify({ name: itemInputValue }), headers:{action:'add'} }));
             setItemInputValue('');
             getItems();
           }} />
