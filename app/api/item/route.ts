@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { addItem, deleteItem, toggleCompleted } from "@/actions";
+import { addItem, deleteItem, toggleCompleted, updateItem } from "@/actions";
 
 export async function POST (req: NextRequest) {
   const action = req.headers.get('action');
@@ -15,6 +15,10 @@ export async function POST (req: NextRequest) {
       break;
     case 'toggle':
       res = await toggleCompleted(json.name, json.id);
+      break;
+    case 'update':
+      res = await updateItem(json.oldName, json.newName, json.id);
+    break; 
     default:
       break;
   }
@@ -23,5 +27,3 @@ export async function POST (req: NextRequest) {
 }
 
 export const dynamic = 'force-dynamic';
-
-export const revalidate = 10;

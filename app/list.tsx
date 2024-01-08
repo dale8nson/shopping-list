@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { OrderList } from 'primereact/orderlist';
 import { Checkbox } from 'primereact/checkbox';
 import { InputText } from 'primereact/inputtext';
+import { Inplace, InplaceDisplay, InplaceContent } from 'primereact/inplace';
+        
 import type { WithId, Document, InsertOneResult } from "mongodb";
 import { addItem } from '@/actions';
 import { useDebounce } from 'primereact/hooks';
@@ -33,15 +35,34 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 
   const ListItem = ({ name, completed, id }: { name: string, completed: string, id: string | undefined }) => {
     const [done, setDone] = useState<boolean>((completed === "true") ? true : false);
+    const [text, setText] = useState(name);
+    const [oldText, setOldText] = useState(name);
 
     return (
       <div className='flex-col align-middle justify-center' id={id} >
         <div className='flex justify-between hover:[&_i:text-black] hover:[&_i:font-black]'>
-          <Checkbox checked={done} onChange={async e => {
+          <Checkbox   pt={{input:{className:'border-gray-400 border-style-solid border-2 text-[1.25rem]'}, icon:{className:'hover:[stroke-gray-400]'}}} checked={done} onChange={async e => {
             setDone(e.checked as boolean);
             await fetch(new NextRequest(new URL('/api/item', baseUrl), { method: 'POST', body: JSON.stringify({ name }), headers: { action: 'toggle' } }))
           }} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
-          <div className={`font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}`}>{name}</div>
+          <Inplace unstyled pt={{display:{className:`font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}`}, content:{className:'text-black text-3xl font-bold'}}}
+          onOpen={() => setOldText(text)} 
+          
+          onBlur={async () => {
+            alert('editor closed');
+            const url = new URL('/api/item', baseUrl);
+            const req = new NextRequest(url, {method:'POST', body:JSON.stringify({oldName:oldText, newName:text, id}), headers:{action:'update'}});
+            const res = await fetch(req);
+            console.error(`onClose res:`,res);
+          }}>
+            <InplaceDisplay >
+              {text}
+            </InplaceDisplay>
+            <InplaceContent>
+              <InputText value={text} onChange={e => setText(e.target.value)} />
+            </InplaceContent>
+          </Inplace>
+          {/* <div className={`font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}`}>{name}</div> */}
           <Button unstyled className='mr-0 ml-auto [&_i:hover:text-gray-400]' onClick={async () => {
             await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name, id }), headers: { action: 'delete' } }));
             getItems();

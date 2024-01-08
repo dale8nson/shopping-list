@@ -37,3 +37,16 @@ export const toggleCompleted = async (name:string, id?:string) => {
 
   return result;
 }
+
+export const updateItem = async (oldName:string, newName:string, id?:string) => {
+  const client = await clientPromise;
+  const db = client.db('shopping-list');
+  const items = db.collection('items');
+
+  const result = await items.updateOne({name:oldName, id}, {$set:{name:newName}});
+
+  console.log(`updateItem result`);
+
+  return result;
+
+}
