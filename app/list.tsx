@@ -44,8 +44,8 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 
     return (
       <div className='flex-col align-middle justify-center' id={id} >
-        <div className='flex justify-between hover:[&_i:text-black] hover:[&_i:font-black]'>
-          <Checkbox pt={{ input: { className: 'border-gray-400 border-style-solid border-2 text-[1.25rem]' }, icon: { className: 'hover:[stroke-gray-400]' } }} checked={done} onChange={async e => {
+        <div className='flex spacing-x-4 hover:[&_i:text-black] hover:[&_i:font-black]'>
+          <Checkbox pt={{ input: { className: 'border-gray-400 border-style-solid border-2 rounded-md bg-white text-gray-400 stroke-gray-400 text-[1.5rem]' }, root:{className:'border-none  rounded-md'}, icon: { className: 'hover:[stroke-gray-400] rounded-md' } }} checked={done} onChange={async e => {
             setDone(e.checked as boolean);
             await fetch(new NextRequest(new URL('/api/item', baseUrl), { method: 'POST', body: JSON.stringify({ name }), headers: { action: 'toggle' } }))
           }} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
@@ -116,7 +116,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
   return (
     <>
       <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0 bg-white h-[100vh] w-[100vw] overflow-hidden' >
-        <OrderList unstyled className='!h-[100vh]' {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] xs:h-[10%] [z-index:20] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-4xl border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'sticky !top-[10%] left-0 w-full xs:!h-[90%] sm:!h-[70%] [z-index:15] overflow-scroll ' }, root: { className: '!h-[90vh] absolute w-[100vw] [z-index:5]' }, container: { className: 'absolute top-[10%] !h-[85%] w-full [z-index:10] overflow-scroll' }, controls: { className: 'hidden' } }} />
+        <OrderList unstyled className='!h-[100vh]' {...{ value: items, itemTemplate, header: 'Shopping List', onChange: e => setItems(e.value) }} dragdrop={true} pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] xs:h-[10%] [z-index:20] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-4xl border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'sticky !top-[10%] left-0 w-full xs:!h-[90%] sm:!h-[70%] [z-index:15] overflow-scroll ' }, root: { className: '!h-[90vh] absolute w-[100vw] [z-index:5]' }, container: { className: 'absolute top-[10%] !h-[85%] w-full [z-index:10] overflow-scroll' }, controls: { className: 'hidden' } }} />
         <div className='flex justify-center space-x-2 fixed bottom-0 left-0 xs:h-[15%] sm:h-[15%] ![z-index:17] bg-black p-4 m-0 w-full' >
           <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto ' value={itemInputValue} onChange={e => {
             console.log(`e:`, e);
