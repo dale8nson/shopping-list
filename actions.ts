@@ -50,3 +50,5 @@ export const updateItem = async (oldName:string, newName:string, id?:string) => 
   return result;
 
 }
+
+export const getUUID = () => crypto.randomUUID();

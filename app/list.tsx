@@ -14,9 +14,9 @@ import { Divider } from 'primereact/divider';
 import { NextRequest } from 'next/server';
 import { getClientBuildManifest } from 'next/dist/client/route-loader';
 import { useRouter } from 'next/navigation';
+import { getUUID } from '@/actions';
 
 const List = ({ baseUrl }: { baseUrl: string }) => {
-  console.log(`baseUrl:`, baseUrl);
   const [items, setItems] = useState([]);
   // const itemsRef = useRef(null);
   const [itemInputValue, setItemInputValue] = useState('');
@@ -28,18 +28,27 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
   const getItems = useCallback(async () => {
     // if(isEditing) return;
     const url = new URL('/api/items', baseUrl);
-    console.log(`url.href:`, url);
     const req = new NextRequest(url);
-    console.log(`url:`, url);
     const items = await fetch(new NextRequest(url)).then(res => res.json());
     setItems(items);
   }, [isEditing]);
+
+  
 
   const ListItem = ({ name, completed, id }: { name: string, completed: string, id: string | undefined }) => {
     const [done, setDone] = useState<boolean>((completed === "true") ? true : false);
     const [text, setText] = useState(name);
     const oldTextRef = useRef(name);
     const textRef = useRef(name);
+
+    const onEdited = async () => {
+      const url = new URL('/api/item', baseUrl);
+      const req = new NextRequest(url, { method: 'POST', body: JSON.stringify({ oldName: oldTextRef.current, newName: text, id }), headers: { action: 'update' } });
+      const res = await fetch(req);
+      getItems();
+      intervalId.current = setInterval(getItems, 10000);
+      setIsEditing(false);
+    }
 
     return (
       <div className='flex-col align-middle justify-center' id={id} >
@@ -50,26 +59,19 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
           }} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
           <Inplace unstyled pt={{ display: { className: `font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}` }, content: { className: 'text-black text-3xl font-bold' } }}
             onOpen={() => {
-              console.log('onOpen');
               oldTextRef.current = text
               setIsEditing(true);
               clearInterval(intervalId.current);
             }}
 
-            onBlur={async () => {
-              console.log('onBlur');
-              const url = new URL('/api/item', baseUrl);
-              const req = new NextRequest(url, { method: 'POST', body: JSON.stringify({ oldName: oldTextRef.current, newName: text, id }), headers: { action: 'update' } });
-              const res = await fetch(req);
-              getItems();
-              intervalId.current = setInterval(getItems, 10000);
-              setIsEditing(false);
-            }}>
+            onBlur={onEdited} >
             <InplaceDisplay >
               {text}
             </InplaceDisplay>
             <InplaceContent>
-              <InputText value={text} onChange={e => setText(e.target.value)} />
+              <InputText value={text} onChange={e => setText(e.target.value)} onKeyUp={e => {
+                if(e.code === 'Enter') onEdited();
+              }} />
             </InplaceContent>
           </Inplace>
           <Button unstyled className='mr-0 ml-auto [&_i:hover:text-gray-400]' onClick={async () => {
@@ -91,11 +93,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
     )
   }
 
-  console.log(`itemInputValue:`, itemInputValue);
-
   useEffect(() => {
-
-    console.log(`useEffect`);
 
     if (!isEditing) {
 
@@ -104,7 +102,6 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
       getItems();
 
       intervalId.current = setInterval(getItems, 10000);
-      console.log(`intervalId.current:`, intervalId.current);
     }
 
   }, []);
@@ -113,28 +110,29 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 
   return (
     <>
-      <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0 bg-white h-[100vh] w-[100vw] overflow-hidden' >
-        <OrderList unstyled className='!h-[100vh]' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} dragdrop={true} pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] xs:h-[10%] [z-index:20] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-3xl mx-auto w-full border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'sticky !top-[10%] left-0 w-full xs:!h-[90%] sm:!h-[70%] [z-index:15] overflow-scroll ' }, root: { className: '!h-[90vh] absolute w-[100vw] [z-index:5]' }, container: { className: 'absolute top-[10%] !h-[85%] w-full [z-index:10] overflow-scroll' }, controls: { className: 'hidden' } }} />
+      <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0 bg-white h-[100vh] w-[100vw] overflow-hidden lg:w-[50vw] !lg:mx-auto' >
+        <OrderList unstyled className='!h-[100vh] lg:left-auto' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} dragdrop={true} pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] xs:h-[10%] lg:w-[50vw] [z-index:20] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-3xl mx-auto w-full border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'sticky !top-[10%] left-0 w-full xs:!h-[90%] sm:!h-[70%] [z-index:15] overflow-scroll ' }, root: { className: '!h-[90vh] absolute w-[100vw] [z-index:5]' }, container: { className: 'absolute top-[10%] !h-[85%] w-full [z-index:10] overflow-scroll' }, controls: { className: 'hidden' } }} />
         <div className='flex justify-center space-x-2 fixed bottom-0 left-0 xs:h-[15%] sm:h-[15%] ![z-index:17] bg-black p-4 m-0 w-full' >
           <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto ' value={itemInputValue} onChange={e => {
-            console.log(`e:`, e);
             setItemInputValue(e.target.value);
           }}
             pt={{
               root: {
                 onKeyDown: async (e) => {
                   if (e.code === 'Enter') {
-                    await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: crypto.randomUUID() }), headers: { action: 'add' } }));
+                    const uuid = await fetch(new NextRequest(new URL('/api/uuid', baseUrl))).then(res => res.json()).then(json => json.uuid);
+                    await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: `${uuid}` }), headers: { action: 'add' } }));
                     setItemInputValue('');
                     getItems();
                   }
                 }
               }
             }}
-
           />
           <Button severity='secondary' icon='pi pi-plus text-3xl' className='text-3xl w-3/12' pt={{ root: { className: 'bg-black [z-index:25]' }, label:{className:'text-white, [z-index:10]'} }} raised onClick={async () => {
-            console.log(`addItemResult:`, await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: crypto.randomUUID() }), headers: { action: 'add' } })));
+            const uuid = await fetch(new NextRequest(new URL('/api/uuid', baseUrl))).then(res => res.json()).then(json => json.uuid);
+            
+            await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: `${uuid}`}), headers: { action: 'add' }})).then(res => res.json()).then(json => json.uuid);
             setItemInputValue('');
             getItems();
           }} />

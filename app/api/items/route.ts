@@ -11,7 +11,7 @@ export const GET = async (req: NextRequest) => {
   console.log(`itemList:`, itemList);
   const itemArr = await itemList.toArray();
   console.log(`itemArr:`, itemArr);
-  const json = itemArr.map(item => ({name:item.name, completed:item.completed}))
+  const json = itemArr.map(item => ({name:item.name, completed:item.completed, id: item.id}));
   return NextResponse.json(json);
 }
 

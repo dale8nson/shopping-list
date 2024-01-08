@@ -8,10 +8,10 @@ export async function POST (req: NextRequest) {
   const json = await req.json();
   switch(action) {
     case 'add':
-      res = await addItem(json.name);
+      res = await addItem(json.name, json.id);
       break;
     case 'delete':
-      res = await deleteItem(json.name);
+      res = await deleteItem(json.name, json.id);
       break;
     case 'toggle':
       res = await toggleCompleted(json.name, json.id);
