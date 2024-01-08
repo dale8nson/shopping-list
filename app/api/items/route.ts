@@ -15,6 +15,6 @@ export const GET = async (req: NextRequest) => {
   return NextResponse.json(json);
 }
 
-// export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 
 // export const revalidate = 10;
