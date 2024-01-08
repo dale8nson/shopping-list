@@ -133,7 +133,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
             }}
 
           />
-          <Button severity='secondary' className='text-3xl w-3/12' pt={{ root: { className: 'bg-black [z-index:25]' }, label:{className:'text-white, [z-index:10]'} }} raised label={'Add'} onClick={async () => {
+          <Button severity='secondary' icon='pi pi-plus text-3xl' className='text-3xl w-3/12' pt={{ root: { className: 'bg-black [z-index:25]' }, label:{className:'text-white, [z-index:10]'} }} raised onClick={async () => {
             console.log(`addItemResult:`, await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: crypto.randomUUID() }), headers: { action: 'add' } })));
             setItemInputValue('');
             getItems();
