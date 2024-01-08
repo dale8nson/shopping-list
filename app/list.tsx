@@ -114,7 +114,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
   return (
     <>
       <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0 bg-white h-[100vh] w-[100vw] overflow-hidden' >
-        <OrderList unstyled className='!h-[100vh]' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 && 's'})`, onChange: e => setItems(e.value) }} dragdrop={true} pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] xs:h-[10%] [z-index:20] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-3xl mx-auto w-full border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'sticky !top-[10%] left-0 w-full xs:!h-[90%] sm:!h-[70%] [z-index:15] overflow-scroll ' }, root: { className: '!h-[90vh] absolute w-[100vw] [z-index:5]' }, container: { className: 'absolute top-[10%] !h-[85%] w-full [z-index:10] overflow-scroll' }, controls: { className: 'hidden' } }} />
+        <OrderList unstyled className='!h-[100vh]' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} dragdrop={true} pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] xs:h-[10%] [z-index:20] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-3xl mx-auto w-full border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'sticky !top-[10%] left-0 w-full xs:!h-[90%] sm:!h-[70%] [z-index:15] overflow-scroll ' }, root: { className: '!h-[90vh] absolute w-[100vw] [z-index:5]' }, container: { className: 'absolute top-[10%] !h-[85%] w-full [z-index:10] overflow-scroll' }, controls: { className: 'hidden' } }} />
         <div className='flex justify-center space-x-2 fixed bottom-0 left-0 xs:h-[15%] sm:h-[15%] ![z-index:17] bg-black p-4 m-0 w-full' >
           <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto ' value={itemInputValue} onChange={e => {
             console.log(`e:`, e);
@@ -145,5 +145,3 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 }
 
 export default List
-
-// export const dynamic = 'force-dynamic';
