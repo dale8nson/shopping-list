@@ -44,7 +44,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
     return (
       <div className='flex-col align-middle justify-center' id={id} >
         <div className='flex spacing-x-4 hover:[&_i:text-black] hover:[&_i:font-black]'>
-          <Checkbox pt={{ input: { className: 'border-gray-400 border-style-solid border-2 rounded-md bg-white text-gray-400 stroke-gray-400 text-[1.5rem]' }, root:{className:'border-none  rounded-md'}, icon: { className: 'hover:[stroke-gray-400] rounded-md' } }} checked={done} onChange={async e => {
+          <Checkbox pt={{ input: { className: 'border-gray-400 border-style-solid border-2 rounded-md bg-white text-gray-400 stroke-gray-400 text-[1.5rem]' }, root: { className: 'border-none  rounded-md' }, icon: { className: 'hover:[stroke-gray-400] rounded-md' } }} checked={done} onChange={async e => {
             setDone(e.checked as boolean);
             await fetch(new NextRequest(new URL('/api/item', baseUrl), { method: 'POST', body: JSON.stringify({ name }), headers: { action: 'toggle' } }))
           }} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
@@ -119,7 +119,20 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
           <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto ' value={itemInputValue} onChange={e => {
             console.log(`e:`, e);
             setItemInputValue(e.target.value);
-          }} />
+          }}
+            pt={{
+              root: {
+                onKeyDown: async (e) => {
+                  if (e.code === 'Enter') {
+                    await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: crypto.randomUUID() }), headers: { action: 'add' } }));
+                    setItemInputValue('');
+                    getItems();
+                  }
+                }
+              }
+            }}
+
+          />
           <Button severity='secondary' className='text-3xl w-3/12' pt={{ root: { className: 'bg-black' } }} raised label={'Add'} onClick={async () => {
             console.log(`addItemResult:`, await fetch(new NextRequest(new URL(`/api/item`, baseUrl), { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: crypto.randomUUID() }), headers: { action: 'add' } })));
             setItemInputValue('');
