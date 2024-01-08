@@ -49,7 +49,6 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
           onOpen={() => setOldText(text)} 
           
           onBlur={async () => {
-            alert('editor closed');
             const url = new URL('/api/item', baseUrl);
             const req = new NextRequest(url, {method:'POST', body:JSON.stringify({oldName:oldText, newName:text, id}), headers:{action:'update'}});
             const res = await fetch(req);
