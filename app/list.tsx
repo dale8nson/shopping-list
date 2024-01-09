@@ -55,7 +55,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
         <div className='flex spacing-x-4 hover:[&_i:text-black] hover:[&_i:font-black]'>
           <Checkbox pt={{ input: { className: 'border-gray-400 border-style-solid border-2 rounded-md bg-white text-gray-400 stroke-gray-400 text-[1.5rem]' }, root: { className: 'border-none  rounded-md' }, icon: { className: 'hover:[stroke-gray-400] rounded-md' } }} checked={done} onChange={async e => {
             setDone(e.checked as boolean);
-            await fetch(new NextRequest(new URL('/api/item', baseUrl), { method: 'POST', body: JSON.stringify({ name }), headers: { action: 'toggle' } }))
+            await fetch(new NextRequest(new URL('/api/item', baseUrl), { method: 'POST', body: JSON.stringify({ name, id }), headers: { action: 'toggle' } }))
           }} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
           <Inplace unstyled pt={{ display: { className: `font-bold text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}` }, content: { className: 'text-black text-3xl font-bold' } }}
             onOpen={() => {
@@ -111,7 +111,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
   return (
     <>
       <div className='flex-col lg:my-4 xs:m-0 absolute top-0 left-0 bg-white h-[90vh] w-full overflow-hidden [z-index:0]' >
-        <OrderList  className='h-[90vh] w-full lg:left-auto [z-index:2]' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} pt={{ header: { className: 'relative top-0 left-auto w-full h-[10%] lg:w-6/12 lg:left-auto mx-auto [z-index:30] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-3xl border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'relative left-0 w-full h-[90vh]  [z-index:15]' }, root: { className: 'relative h-[90vh] w-full [z-index:5]' }, container: { className: 'relative h-[90vh] w-full [z-index:10]' }, controls: { className: 'hidden' } }} />
+        <OrderList  className='h-[90vh] w-full lg:left-auto [z-index:2]' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} pt={{ header: { className: 'relative top-0 left-auto w-full h-[10%] lg:w-6/12 lg:left-auto mx-auto [z-index:30] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-3xl border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: ' max-h-screen relative left-0 w-full h-full  [z-index:15]' }, root: { className: 'relative h-[90vh] w-full [z-index:5]' }, container: { className: 'relative h-[90vh] w-full [z-index:10]' }, controls: { className: 'hidden' } }} />
         <div className='flex justify-center space-x-2 fixed lg:w-6/12 bottom-0 left-0 xs:h-[15%] sm:h-[15%] ![z-index:17] bg-black py-4 m-0 w-full lg:left-auto' >
           <InputText className='text-black text-3xl w-9/12 h-auto ml-0 ' value={itemInputValue} onChange={e => {
             setItemInputValue(e.target.value);
