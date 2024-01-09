@@ -12,7 +12,7 @@ export default async function Home() {
   const itemArr = await itemList.toArray();
 
   return (
-    <main> 
+    <main className="absolute lg:w-[50vw] lg:h-[100vh] lg:mx-[25vw] lg:my-0"> 
         <List baseUrl={process.env.BASE_URL as string} />
     </main>
   )

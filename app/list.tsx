@@ -110,14 +110,15 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
 
   return (
     <>
-      <div className='flex-col md:my-4 xs:m-0 absolute top-0 left-0 bg-white h-[100vh] w-[100vw] overflow-hidden lg:w-[50vw] !lg:mx-auto' >
-        <OrderList unstyled className='!h-[100vh] lg:left-auto' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} dragdrop={true} pt={{ header: { className: 'fixed top-0 left-0 w-[100vw] xs:h-[10%] lg:w-[50vw] [z-index:20] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-3xl mx-auto w-full border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'sticky !top-[10%] left-0 w-full xs:!h-[90%] sm:!h-[70%] [z-index:15] overflow-scroll ' }, root: { className: '!h-[90vh] absolute w-[100vw] [z-index:5]' }, container: { className: 'absolute top-[10%] !h-[85%] w-full [z-index:10] overflow-scroll' }, controls: { className: 'hidden' } }} />
-        <div className='flex justify-center space-x-2 fixed bottom-0 left-0 xs:h-[15%] sm:h-[15%] ![z-index:17] bg-black p-4 m-0 w-full' >
-          <InputText className='text-black text-3xl w-9/12 h-auto ml-0 mr-auto ' value={itemInputValue} onChange={e => {
+      <div className='flex-col lg:my-4 xs:m-0 absolute top-0 left-0 bg-white h-full w-full overflow-hidden' >
+        <OrderList unstyled className='h-full w-full lg:left-auto' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} dragdrop={true} pt={{ header: { className: 'fixed top-0 left-auto w-full xs:h-[10%] lg:w-6/12 lg:left-auto mx-auto [z-index:20] !bg-white/30 backdrop-blur-md text-black p-2 font-bold text-3xl w-full border-b-gray-400 border-style-solid border-2 m-0 p-2' }, list: { className: 'sticky !top-[10%] left-0 w-full xs:!h-[90%] sm:!h-[70%] [z-index:15] overflow-scroll ' }, root: { className: 'relative h-full w-full [z-index:5]' }, container: { className: 'absolute top-[10%] !h-[85%] w-full [z-index:10] overflow-scroll' }, controls: { className: 'hidden' } }} />
+        <div className='flex justify-center space-x-2 fixed lg:w-6/12 bottom-0 left-0 xs:h-[15%] sm:h-[15%] ![z-index:17] bg-black py-4 m-0 w-full lg:left-auto' >
+          <InputText className='text-black text-3xl w-9/12 h-auto ml-0 ' value={itemInputValue} onChange={e => {
             setItemInputValue(e.target.value);
           }}
             pt={{
               root: {
+                className:'lg:w-9/12',
                 onKeyDown: async (e) => {
                   if (e.code === 'Enter') {
                     const uuid = await fetch(new NextRequest(new URL('/api/uuid', baseUrl))).then(res => res.json()).then(json => json.uuid);
