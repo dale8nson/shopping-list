@@ -8,9 +8,7 @@ export const GET = async (req: NextRequest) => {
   const db = client.db('shopping-list');
   const items = db.collection('items');
   const itemList = items.find();
-  console.log(`itemList:`, itemList);
   const itemArr = await itemList.toArray();
-  console.log(`itemArr:`, itemArr);
   const json = itemArr.map(item => ({name:item.name, completed:item.completed, id: item.id}));
   return NextResponse.json(json);
 }
