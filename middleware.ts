@@ -22,7 +22,7 @@ const middleware = async (req:NextRequest) => {
     return NextResponse.redirect(url);
   }
   
-  return fetch(new URL(req.url));
+  return fetch(req.url);
 }
 
 export default middleware;
