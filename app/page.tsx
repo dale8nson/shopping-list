@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <main className="fixed top-0 left-0 w-screen h-screen flex-col lg:h-screen lg:mx-auto lg:my-0"> 
-        <List baseUrl={process.env.BASE_URL as string} />
+        <List />
     </main>
   )
 }

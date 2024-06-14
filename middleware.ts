@@ -31,4 +31,6 @@ export const config = {
   matcher: '/:path'
 }
 
+export const runtime = 'nodejs' 
+
 export const dynamic = 'force-dynamic';

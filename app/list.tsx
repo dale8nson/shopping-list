@@ -16,7 +16,7 @@ import { getClientBuildManifest } from 'next/dist/client/route-loader';
 import { useRouter } from 'next/navigation';
 import { getUUID } from '@/actions';
 
-const List = ({ baseUrl }: { baseUrl: string }) => {
+const List = () => {
   const [items, setItems] = useState([]);
   // const itemsRef = useRef(null);
   const [itemInputValue, setItemInputValue] = useState('');
@@ -30,7 +30,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
     const url = '/api/items';
     const items = await fetch(url).then(res => res.json());
     setItems(items);
-  }, [isEditing]);
+  }, []);
 
 
 
@@ -104,7 +104,7 @@ const List = ({ baseUrl }: { baseUrl: string }) => {
       intervalId.current = setInterval(getItems, 10000);
     }
 
-  }, []);
+  }, [getItems, isEditing]);
 
 
 
