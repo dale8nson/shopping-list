@@ -8,7 +8,7 @@ export const GET = async (req:NextRequest) => {
   const user = req.headers.get('User');
   const code = req.headers.get('Code');
   const client = await clientPromise;
-  const db = client?.db('shopping-list');
+  const db = client?.db('shopping-list-demo');
   const passwords = db?.collection('passwords');
   const password = await passwords?.findOne({user});
   if(!password) {

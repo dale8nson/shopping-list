@@ -6,7 +6,7 @@ import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 
 
 export const metadata: Metadata = {
-  title: 'Shopping List by Datsuko',
+  title: 'Shopping List',
   description: ''
 }
 
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <PrimeReactProvider>
     <html lang="en">
-      <body >{children}</body>
+      <body className='bg-black' >{children}</body>
     </html>
     </PrimeReactProvider>
   )

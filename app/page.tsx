@@ -12,7 +12,7 @@ export default async function Home() {
   const itemArr = await itemList.toArray();
 
   return (
-    <main className="absolute w-[100vw] h-[100vh] lg:w-[50vw] lg:h-[100vh] lg:mx-[25vw] lg:my-0"> 
+    <main className="fixed top-0 left-0 w-screen h-screen flex-col lg:h-screen lg:mx-auto lg:my-0"> 
         <List baseUrl={process.env.BASE_URL as string} />
     </main>
   )
