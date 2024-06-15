@@ -125,8 +125,8 @@ const List = () => {
 
   return (
     <>
-      <div className={`relative flex-col lg:mx-auto lg:w-5/12  lg:border-white lg:border-2 m-0 bg-white z-0`}  style={{height:`${height}px`}}>
-        <OrderList unstyled dataKey='items' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} pt={{ header: { className: 'w-full flex m-auto lg:m-auto z-30 bg-white text-black p-2 font-bold text-3xl border-b-gray-400 border-style-solid border-2 m-0 lg:m-auto !align-middle justify-center' }, list: { className: 'w-full m-0 overflow-scroll', style:{height: `calc(${height}px - 6.4rem) `} }, root: { className: 'relative bg-white w-full m-0 text-center flex-col', style:{height: `calc(${height}px - 6.4rem)`} }, container: { className: 'lg:h-screen min-h-screen m-0 w-full flex-col', style:`${height}px` }, controls: { className: 'hidden' } }} />
+      <div className={`relative flex-col lg:mx-auto lg:w-5/12  lg:border-white lg:border-2 m-0 bg-white z-0`} style={{height:`${height}px`}} >
+        <OrderList unstyled dataKey='items' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} listStyle={{height: `calc(${height}px - 6.4rem) `}} pt={{ header: { className: 'w-full flex m-auto lg:m-auto z-30 bg-white text-black p-2 font-bold text-3xl border-b-gray-400 border-style-solid border-2 m-0 lg:m-auto !align-middle justify-center' }, list: { className: 'w-full m-0 overflow-scroll' }, root: { className: 'relative bg-white w-full m-0 text-center flex-col' }, container: { className: 'lg:h-screen min-h-screen m-0 w-full flex-col' }, controls: { className: 'hidden' } }} />
         <div className='absolute bottom-0  flex justify-center justify-self-end w-full min-h-16 z-50 bg-black p-2 lg:py-4 my-0 lg:mx-auto' >
           <InputText className='text-black border-2 border-white text-3xl w-10/12  m-1 ' value={itemInputValue} onChange={e => {
             setItemInputValue(e.target.value);
