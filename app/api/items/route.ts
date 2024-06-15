@@ -6,9 +6,7 @@ import { NextResponse } from "next/server";
 export const GET = async (req: NextRequest) => {
   const client = await clientPromise;
   const db = client.db('shopping-list');
-  console.log('db: ', db)
   const items = db.collection('items');
-  console.log('items: ', items)
   const itemList = items.find();
   const itemArr = await itemList.toArray();
   const json = itemArr.map(item => ({name:item.name, completed:item.completed, id: item.id}));

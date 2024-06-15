@@ -24,6 +24,8 @@ const List = () => {
   const router = useRouter();
   const intervalId = useRef<NodeJS.Timeout>();
   const [isEditing, setIsEditing] = useState(false);
+  const [width, setWidth] = useState(0)
+  const [height, setHeight] = useState(0)
 
   const getItems = useCallback(async () => {
     // if(isEditing) return;
@@ -32,7 +34,20 @@ const List = () => {
     setItems(items);
   }, []);
 
+  useEffect(() =>  {
+    if(!window) return
+    const { innerWidth: width, innerHeight: height } = window
+    setWidth(width)
+    setHeight(height)
 
+    window.addEventListener('resize', () => {
+
+    const { innerWidth: width, innerHeight: height } = window
+    setWidth(width)
+    setHeight(height)
+
+    })
+  },[])
 
   const ListItem = ({ name, completed, id }: { name: string, completed: string, id: string | undefined }) => {
     const [done, setDone] = useState<boolean>((completed === "true") ? true : false);
@@ -51,13 +66,13 @@ const List = () => {
     }
 
     return (
-      <div className='flex-col align-baseline justify-center' id={id} >
-        <div className='flex spacing-x-4 align-middle justify-center hover:[&_i:text-black] hover:[&_i:font-black]'>
-          <Checkbox pt={{ input: { className: 'border-gray-400 border-style-solid border-2 rounded-md bg-white text-gray-400 stroke-gray-400 text-[1.5rem]' }, root: { className: 'border-none  rounded-md' }, icon: { className: 'hover:[stroke-gray-400] rounded-md' } }} checked={done} onChange={async e => {
+      <div className='flex-col  justify-start' id={id} >
+        <div className='flex spacing-x-4 align-baseline justify-center hover:[&_i:text-black] hover:[&_i:font-black]'>
+          <Checkbox pt={{ input: { className:'bg-white text-gray-400 stroke-gray-400' }, root: { className: '!border-gray-400 !border-style-solid !border-2 rounded-md h-full' }, icon: { className: 'hover:[stroke-gray-400]' } }} checked={done} onChange={async e => {
             setDone(e.checked as boolean);
             await fetch('/api/item', { method: 'POST', body: JSON.stringify({ name, id }), headers: { action: 'toggle' } })
           }} className={`mx-2 my-auto ${done ? ' border-gray-400 decoration-gray-400 bg-gray-400' : 'border-black'}`} />
-          <Inplace unstyled pt={{ root: { className: 'align-middle justify-center' }, display: { className: `font-bold xs:text-2xl md:text-3xl align-middle ${done ? 'line-through text-gray-400' : 'text-black'}` }, content: { className: 'text-black xs:text-sm md:text-3xl align-middle font-bold' } }}
+          <Inplace pt={{ root: { className: 'align-baseline justify-center leading-9' }, display: { className: `font-bold xs:text-2xl md:text-3xl ${done ? 'line-through text-gray-400' : 'text-black'}` }, content: { className: 'text-black xs:text-sm md:text-3xl  font-bold' } }}
             onOpen={() => {
               oldTextRef.current = text
               setIsEditing(true);
@@ -110,8 +125,8 @@ const List = () => {
 
   return (
     <>
-      <div className='relative flex-col lg:mx-auto lg:w-5/12 lg:border-white lg:border-2 m-0 bg-white h-screen z-0' >
-        <OrderList dataKey='items' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} pt={{ header: { className: 'w-full flex m-auto lg:m-auto z-30 bg-white text-black p-2 font-bold text-3xl border-b-gray-400 border-style-solid border-2 m-0 lg:m-auto !align-middle justify-center' }, list: { className: 'relative w-full  z-[15]' }, root: { className: 'bg-white w-full h-full text-center flex-col ' }, container: { className: 'lg:h-screen w-full z-10 flex-col' }, controls: { className: 'hidden' } }} />
+      <div className={`relative flex-col lg:mx-auto lg:w-5/12  lg:border-white lg:border-2 m-0 bg-white z-0`}  style={{height:`${height}px`}}>
+        <OrderList unstyled dataKey='items' {...{ value: items, itemTemplate, header: `Shopping List (${items.length} item${items.length !== 1 ? 's' : ''})`, onChange: e => setItems(e.value) }} pt={{ header: { className: 'w-full flex m-auto lg:m-auto z-30 bg-white text-black p-2 font-bold text-3xl border-b-gray-400 border-style-solid border-2 m-0 lg:m-auto !align-middle justify-center' }, list: { className: 'w-full m-0 overflow-scroll', style:{height: `calc(${height}px - 6.4rem) `} }, root: { className: 'relative bg-white w-full m-0 text-center flex-col', style:{height: `calc(${height}px - 6.4rem)`} }, container: { className: 'lg:h-screen min-h-screen m-0 w-full flex-col', style:`${height}px` }, controls: { className: 'hidden' } }} />
         <div className='absolute bottom-0  flex justify-center justify-self-end w-full min-h-16 z-50 bg-black p-2 lg:py-4 my-0 lg:mx-auto' >
           <InputText className='text-black border-2 border-white text-3xl w-10/12  m-1 ' value={itemInputValue} onChange={e => {
             setItemInputValue(e.target.value);
@@ -131,7 +146,7 @@ const List = () => {
               }
             }}
           />
-          <Button severity='secondary' icon='pi pi-plus text-3xl' className='text-3xl w-2/12 border-2 border-white' pt={{ root: { className: 'bg-black border-2 border-white z-[25]' }, label: { className: 'text-white, z-10' } }} raised onClick={async () => {
+          <Button severity='secondary' icon='pi pi-plus text-white text-3xl' className='text-3xl w-2/12 border-2 border-white' pt={{ root: { className: 'bg-black border-2 border-white z-[25]' }, label: { className: 'text-white, z-50' } }} raised onClick={async () => {
             const uuid = await fetch('/api/uuid').then(res => res.json()).then(json => json.uuid);
 
             await fetch(`/api/item`, { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: `${uuid}` }), headers: { action: 'add' } }).then(res => res.json()).then(json => json.uuid);

@@ -12,7 +12,7 @@ export default async function Home() {
   const itemArr = await itemList.toArray();
 
   return (
-    <main className="fixed top-0 left-0 w-screen h-screen flex-col lg:h-screen lg:mx-auto lg:my-0"> 
+    <main className="fixed w-full min-h-screen m-0 flex-col lg:h-screen lg:mx-auto lg:my-0"> 
         <List />
     </main>
   )

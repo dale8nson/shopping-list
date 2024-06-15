@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <PrimeReactProvider>
     <html lang="en">
-      <body className='bg-black' >{children}</body>
+      <body className='bg-black min-h-screen w-screen' >{children}</body>
     </html>
     </PrimeReactProvider>
   )
