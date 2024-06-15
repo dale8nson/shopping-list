@@ -6,14 +6,18 @@ const middleware = async (req:NextRequest) => {
   const searchParams = req.nextUrl.searchParams;
   const user = searchParams.get('user');
   const code = searchParams.get('code');
-  let url = new URL('/error/no-credentials', req.nextUrl)
+  const { protocol, host} = req.nextUrl
+  let url =  `${protocol}//${host}/error/no-credentials`
   console.log(`middleware url:`, url);
   if(!user || !code) {
     return NextResponse.redirect(url);
   }
 
-  const valid = await fetch(new URL('/api/auth', req.url), {headers:{'Content-Type':'application/json', 'User':user, 'Code':code}})
-  .then(res => res.json())
+  const valid = await fetch(`${protocol}//${host}/api/auth`, {headers:{'Content-Type':'application/json', 'User':user, 'Code':code}})
+  .then(res => {
+    console.log('middleware res: ', res)
+    return res.json()
+  })
   .then(json => json.value);
 
   console.log(`middleware valid:`, valid);
