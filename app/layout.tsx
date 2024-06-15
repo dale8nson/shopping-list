@@ -6,7 +6,7 @@ import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 
 
 export const metadata: Metadata = {
-  title: 'Shopping List',
+  title: 'Dale Hutchinson | Realtime Shopping List Demo',
   description: ''
 }
 
