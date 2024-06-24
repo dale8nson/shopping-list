@@ -135,7 +135,7 @@ const List = () => {
               root: {
                 className: 'lg:w-9/12 border-2 border-white',
                 onKeyDown: async (e) => {
-                  if(itemInputValue === '') return
+                  if(itemInputValue === '' || !!itemInputValue.match(/$\s+^/)) return
                   if (e.code === 'Enter') {
                     const uuid = await fetch('/api/uuid').then(res => res.json()).then(json => json.uuid);
                     await fetch(`/api/item`, { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: `${uuid}` }), headers: { action: 'add' } });
@@ -147,6 +147,7 @@ const List = () => {
             }}
           />
           <Button severity='secondary' icon='pi pi-plus text-white text-3xl' className='text-3xl w-2/12 border-2 border-white' pt={{ root: { className: 'bg-black border-2 border-white z-[25]' }, label: { className: 'text-white, z-50' } }} raised onClick={async () => {
+            if(itemInputValue === '' || !!itemInputValue.match(/$\s+^/)) return 
             const uuid = await fetch('/api/uuid').then(res => res.json()).then(json => json.uuid);
 
             await fetch(`/api/item`, { method: 'POST', body: JSON.stringify({ name: itemInputValue, id: `${uuid}` }), headers: { action: 'add' } }).then(res => res.json()).then(json => json.uuid);
